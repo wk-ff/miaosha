@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "redis",
+      "type": "com.example.demo.redis.RedisConfiguration",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "redis.host",
+      "type": "java.lang.String",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    },
+    {
+      "name": "redis.password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    },
+    {
+      "name": "redis.pool-max-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    },
+    {
+      "name": "redis.pool-max-total",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    },
+    {
+      "name": "redis.pool-max-wait",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    },
+    {
+      "name": "redis.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    },
+    {
+      "name": "redis.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
+    }
+  ],
+  "hints": []
+}

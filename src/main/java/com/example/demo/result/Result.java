@@ -1,11 +1,11 @@
 package com.example.demo.result;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-
+/**
+ * @author wk-ff
+ */
 @Getter
 @ToString
 public class Result<T> {
@@ -31,7 +31,6 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error(CodeMsg codeMsg){
-        ArrayList
         return new Result<T>(codeMsg);
     }
 }

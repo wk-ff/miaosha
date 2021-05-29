@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/demo")
@@ -22,9 +23,9 @@ public class HelloController {
     RedisService redisService;
 
     @GetMapping("/test")
-    public String test(Model model){
+    public ModelAndView test(Model model){
         model.addAttribute("name", "wk");
-        return "Hello";
+        return new ModelAndView("hello");
     }
 
     @GetMapping("/db/get")

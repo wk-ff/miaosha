@@ -52,13 +52,29 @@ public class RedisService {
                 return false;
             }
             int seconds = prefix.expireSeconds();
+            System.out.println(seconds);
             if(seconds <= 0){
                 jedis.set(realKey, str);
             }else{
-                jedis.setex(realKey, seconds, str);
+                String status = jedis.setex(realKey, seconds, str);
+                System.out.println(status);
             }
 
             jedis.set(realKey, str);
+            return true;
+        }finally {
+            returnToPool(jedis);
+        }
+    }
+
+    public <T> boolean expire(KeyPrefix prefix, String key, int expire){
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            // generate real key
+            String realKey = prefix.getPrefix() + key;
+
+            jedis.expire(realKey, expire);
             return true;
         }finally {
             returnToPool(jedis);

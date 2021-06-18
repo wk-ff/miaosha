@@ -6,6 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+/**
+ * 访问USER数据库
+ * @author wk-ff
+ */
 @Mapper
 public interface UserDao {
 

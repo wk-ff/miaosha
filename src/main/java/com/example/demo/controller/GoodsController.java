@@ -1,17 +1,16 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.MiaoshaUser;
-import com.example.demo.redis.MiaoshaUserKey;
 import com.example.demo.service.MiaoshaUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.util.StringUtils;
 
-import javax.servlet.http.HttpServletResponse;
-
+/**
+ * 展示商品列表，已经商品详情页
+ * @author wk-ff
+ */
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {

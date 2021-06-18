@@ -38,8 +38,10 @@ public class MiaoshaUserService {
         }
         MiaoshaUser user = redisService.get(MiaoshaUserKey.token, token, MiaoshaUser.class);
         if(user != null) {
-            redisService.expire(MiaoshaUserKey.token, token, MiaoshaUserKey.TOKEN_EXPIRE);
+//            redisService.expire(MiaoshaUserKey.token, token, MiaoshaUserKey.TOKEN_EXPIRE);
+            addCookie(response, token, user);
         }
+
         return user;
     }
     public boolean login(HttpServletResponse httpServletResponse, LoginVo loginVo) {
@@ -59,16 +61,16 @@ public class MiaoshaUserService {
             throw new GlobalException(CodeMsg.PASSWORD_ERROR);
         }
         String token = UUIDUtil.uuid();
-        redisService.set(MiaoshaUserKey.token, token, user);
-        Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
-        cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
-        cookie.setPath("/");
-        httpServletResponse.addCookie(cookie);
+        addCookie(httpServletResponse, token, user);
+//        redisService.set(MiaoshaUserKey.token, token, user);
+//        Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
+//        cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
+//        cookie.setPath("/");
+//        httpServletResponse.addCookie(cookie);
         return true;
     }
 
-    public void addCookie(HttpServletResponse response, MiaoshaUser user){
-        String token = UUIDUtil.uuid();
+    public void addCookie(HttpServletResponse response, String token, MiaoshaUser user){
         redisService.set(MiaoshaUserKey.token, token, user);
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());

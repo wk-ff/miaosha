@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+/**登录控制器
+ * @author wk-ff
+ */
 @RestController
 @RequestMapping("/login")
 public class LoginController {

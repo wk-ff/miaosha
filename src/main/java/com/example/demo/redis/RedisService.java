@@ -52,12 +52,12 @@ public class RedisService {
                 return false;
             }
             int seconds = prefix.expireSeconds();
-            System.out.println(seconds);
+//            System.out.println(seconds);
             if(seconds <= 0){
                 jedis.set(realKey, str);
             }else{
                 String status = jedis.setex(realKey, seconds, str);
-                System.out.println(status);
+//                System.out.println(status);
             }
 
             jedis.set(realKey, str);

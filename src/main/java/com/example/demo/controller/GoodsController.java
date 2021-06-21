@@ -36,8 +36,6 @@ public class GoodsController {
     @RequestMapping("/to_list")
     public ModelAndView list(ModelAndView model, MiaoshaUser user){
 
-        logger.info(user.toString());
-
         model.addObject("user", user);
         List<GoodsVo> goodsVos = goodsService.listGoodsVo();
         model.addObject("goodsList", goodsVos);

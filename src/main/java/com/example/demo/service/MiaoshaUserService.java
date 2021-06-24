@@ -29,7 +29,37 @@ public class MiaoshaUserService {
     RedisService redisService;
 
     public MiaoshaUser getById(Long id){
-        return miaoshaUserDao.getByID(id);
+//        查询缓存
+        MiaoshaUser user = redisService.get(MiaoshaUserKey.getById, "" + id, MiaoshaUser.class);
+        if(user != null){
+            return user;
+        }
+
+//        查询数据库
+        user = miaoshaUserDao.getByID(id);
+        if(user != null){
+            redisService.set(MiaoshaUserKey.getById, "" + id, user);
+        }
+        return user;
+    }
+
+    public boolean update(String token, long id, String newPwd){
+        MiaoshaUser user = getById(id);
+        if(user == null){
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+
+        // 更新数据库
+        MiaoshaUser toBeUpdate = new MiaoshaUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.formPassToDBPass(newPwd, user.getSalt()));
+        miaoshaUserDao.update(toBeUpdate);
+
+        // 处理缓存
+        redisService.delete(MiaoshaUserKey.getById, "" + id);
+        user.setPassword(toBeUpdate.getPassword());
+        redisService.set(MiaoshaUserKey.token, token, user);
+        return true;
     }
 
     public MiaoshaUser getByToken(HttpServletResponse response, String token){

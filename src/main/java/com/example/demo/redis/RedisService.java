@@ -1,6 +1,7 @@
 package com.example.demo.redis;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo.domain.MiaoshaOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -27,6 +28,7 @@ public class RedisService {
             // generate real key
             String realKey = prefix.getPrefix() + key;
             String str = jedis.get(realKey);
+            System.out.printf("[DEBUG] %s::get:  %s%n", this.getClass().getName(), realKey);
             return stringToBean(str, clazz);
         }finally {
             returnToPool(jedis);
@@ -52,15 +54,13 @@ public class RedisService {
                 return false;
             }
             int seconds = prefix.expireSeconds();
-//            System.out.println(seconds);
             if(seconds <= 0){
                 jedis.set(realKey, str);
             }else{
                 String status = jedis.setex(realKey, seconds, str);
-//                System.out.println(status);
+                System.out.printf("[DEBUG] %s::set:  %s, %s, %s%n", this.getClass().getName(), realKey, seconds, status);
             }
 
-            jedis.set(realKey, str);
             return true;
         }finally {
             returnToPool(jedis);
@@ -76,6 +76,21 @@ public class RedisService {
 
             jedis.expire(realKey, expire);
             return true;
+        }finally {
+            returnToPool(jedis);
+        }
+    }
+
+    /**
+     *
+     */
+    public boolean delete(MiaoshaUserKey prefix, String key) {
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            String realKey = prefix.getPrefix() + key;
+            long tmp = jedis.del(realKey);
+            return tmp > 0;
         }finally {
             returnToPool(jedis);
         }
@@ -176,6 +191,5 @@ public class RedisService {
             jedis.close();
         }
     }
-
 
 }

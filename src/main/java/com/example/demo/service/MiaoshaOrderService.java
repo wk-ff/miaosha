@@ -10,6 +10,12 @@ public class MiaoshaOrderService {
     @Autowired
     MiaoshaOrderDao miaoshaOrderDao;
 
+    /**
+     * TODO:把对miaosha_order的操作放到这里
+     * @param userId
+     * @param goodsId
+     * @return
+     */
     public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId){
         return miaoshaOrderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
     }

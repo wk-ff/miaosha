@@ -19,8 +19,8 @@ public class OrderServiceTest {
 
     @Test
     public void getGoodsVoByUserIdGoodsId(){
-        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(18912341234L, 1L);
-        System.out.println(order);
+//        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(18912341234L, 1L);
+//        System.out.println(order);
     }
 
     @Test

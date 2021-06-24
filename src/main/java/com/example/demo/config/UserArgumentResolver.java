@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.domain.MiaoshaUser;
 import com.example.demo.service.MiaoshaUserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(@NotNull MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
 
         String paramToken = request.getParameter(MiaoshaUserService.COOKIE_NAME_TOKEN);
+        System.out.printf("[DEBUG] %s::resolveArgument:  %s%n", this.getClass().getName(), paramToken);
         String cookieToken = getCookieValue(request, MiaoshaUserService.COOKIE_NAME_TOKEN);
+        System.out.printf("[DEBUG] %s::resolveArgument:  %s%n", this.getClass().getName(), cookieToken);
         if(StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken)){
             return null;
         }

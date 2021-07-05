@@ -20,32 +20,27 @@
     {
       "name": "redis.pool-max-idle",
       "type": "java.lang.Integer",
-      "sourceType": "com.example.demo.redis.RedisConfiguration",
-      "defaultValue": 0
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
     },
     {
       "name": "redis.pool-max-total",
       "type": "java.lang.Integer",
-      "sourceType": "com.example.demo.redis.RedisConfiguration",
-      "defaultValue": 0
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
     },
     {
       "name": "redis.pool-max-wait",
       "type": "java.lang.Integer",
-      "sourceType": "com.example.demo.redis.RedisConfiguration",
-      "defaultValue": 0
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
     },
     {
       "name": "redis.port",
       "type": "java.lang.Integer",
-      "sourceType": "com.example.demo.redis.RedisConfiguration",
-      "defaultValue": 0
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
     },
     {
       "name": "redis.timeout",
       "type": "java.lang.Integer",
-      "sourceType": "com.example.demo.redis.RedisConfiguration",
-      "defaultValue": 0
+      "sourceType": "com.example.demo.redis.RedisConfiguration"
     }
   ],
   "hints": []

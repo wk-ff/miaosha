@@ -8,14 +8,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.*;
+
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class MyTest {
 
     @Test
     public void test(){
-        Integer integer = 3;
+        Map<String, Integer> map = new HashMap<>();
+        map.put("aaa", 2);
+        Map<String, Integer> tmp = new HashMap<>();
+        tmp.put("aaa", 1);
+        map.putAll(tmp);
+        String s = "eeaabb";
 
-        System.out.println(integer.getClass().getName());
+        System.out.println(map.get("aaa"));
+
     }
 }

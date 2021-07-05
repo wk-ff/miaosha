@@ -77,6 +77,11 @@ public class GoodsController {
                           Model model, MiaoshaUser user,
                           @PathVariable("goodsId")long goodsId){
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
+        if(user == null){
+            logger.info("no user!");
+        }else{
+            logger.info("---" + user.toString());
+        }
 
         long startDate = goodsVo.getStartDate().getTime();
         long endDate = goodsVo.getEndDate().getTime();

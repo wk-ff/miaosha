@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.domain.User;
+import com.example.demo.rabbitmq.MQSender;
 import com.example.demo.redis.RedisService;
 import com.example.demo.redis.UserKey;
 import com.example.demo.service.UserService;
@@ -22,11 +23,20 @@ public class HelloController {
     @Autowired
     RedisService redisService;
 
-    @GetMapping("/test")
-    public ModelAndView test(Model model){
-        model.addAttribute("name", "wk");
-        return new ModelAndView("hello");
-    }
+    @Autowired
+    MQSender sender;
+
+//    @GetMapping("/mq")
+//    public ModelAndView test(){
+//        sender.sendFanout("hello, wk");
+//        return new ModelAndView("hello");
+//    }
+//
+//    @GetMapping("/mq/header")
+//    public ModelAndView header(){
+//        sender.sendHeader("hello, wk");
+//        return new ModelAndView("hello");
+//    }
 
     @GetMapping("/db/get")
     public String dbGet(){

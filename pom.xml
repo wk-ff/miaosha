@@ -115,7 +115,25 @@
                 </configuration>
             </plugin>
         </plugins>
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                &lt;!&ndash;加载资源目录&ndash;&gt;-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    &lt;!&ndash;加载配置文件&ndash;&gt;-->
+<!--                    <include>**/*.xml</include>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    &lt;!&ndash;加载模板文件&ndash;&gt;-->
+<!--                    <include>**/*.html</include>-->
+<!--                    &lt;!&ndash;加载静态文件&ndash;&gt;-->
+<!--                    <include>/static/</include>-->
+<!--                    <include>**/*.htm</include>-->
+<!--                </includes>-->
+
+<!--            </resource>-->
+<!--        </resources>-->
     </build>
+
 
 
 </project>

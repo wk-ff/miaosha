@@ -1,8 +1,11 @@
 package com.example.demo.config;
 
+import com.example.demo.controller.LoginController;
 import com.example.demo.domain.MiaoshaUser;
 import com.example.demo.service.MiaoshaUserService;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Autowired
     MiaoshaUserService miaoshaUserService;
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         Class<?> clazz = parameter.getParameterType();
@@ -30,31 +35,10 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(@NotNull MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
-
-        String paramToken = request.getParameter(MiaoshaUserService.COOKIE_NAME_TOKEN);
-        System.out.printf("[DEBUG] %s::resolveArgument:  %s%n", this.getClass().getName(), paramToken);
-        String cookieToken = getCookieValue(request, MiaoshaUserService.COOKIE_NAME_TOKEN);
-        System.out.printf("[DEBUG] %s::resolveArgument:  %s%n", this.getClass().getName(), cookieToken);
-        if(StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken)){
-            return null;
-        }
-        String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        return miaoshaUserService.getByToken(response, token);
-    }
-
-    private String getCookieValue(HttpServletRequest request, String cookieNameToken) {
-        Cookie[] cookies = request.getCookies();
-        if(cookies == null || cookies.length == 0){
-            return null;
-        }
-        for(Cookie cookie:cookies){
-            if(cookie.getName().equals(cookieNameToken)){
-                return cookie.getValue();
-            }
-        }
-        return null;
+    public Object resolveArgument(@NotNull MethodParameter parameter,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) throws Exception {
+        return UserContext.getUser();
     }
 }

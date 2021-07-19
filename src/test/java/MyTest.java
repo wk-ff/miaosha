@@ -8,22 +8,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.PriorityBlockingQueue;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class MyTest {
 
     @Test
-    public void test(){
-        Map<String, Integer> map = new HashMap<>();
-        map.put("aaa", 2);
-        Map<String, Integer> tmp = new HashMap<>();
-        tmp.put("aaa", 1);
-        map.putAll(tmp);
-        String s = "eeaabb";
-
-        System.out.println(map.get("aaa"));
+    public void test() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        List list = new ArrayList<>(Arrays.asList("a", "b", "c"));
+        short a = 1;
+        System.out.println(list.get(2));
 
     }
 }

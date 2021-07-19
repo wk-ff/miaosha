@@ -84,7 +84,7 @@ public class RedisService {
     /**
      *
      */
-    public boolean delete(MiaoshaUserKey prefix, String key) {
+    public boolean delete(KeyPrefix prefix, String key) {
         Jedis jedis = null;
         try{
             jedis = jedisPool.getResource();

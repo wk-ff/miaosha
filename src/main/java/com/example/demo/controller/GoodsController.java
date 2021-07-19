@@ -48,7 +48,7 @@ public class GoodsController {
     @Autowired
     ApplicationContext applicationContext;
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @RequestMapping(value = "/to_list", produces = "text/html")
     @ResponseBody
@@ -76,6 +76,7 @@ public class GoodsController {
     public Result detail(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                           Model model, MiaoshaUser user,
                           @PathVariable("goodsId")long goodsId){
+        logger.info(Thread.currentThread().toString() + " /goods/detail");
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
         if(user == null){
             logger.info("no user!");

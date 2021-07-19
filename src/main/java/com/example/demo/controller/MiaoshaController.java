@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.access.AccessLimit;
 import com.example.demo.domain.GoodsVo;
 import com.example.demo.domain.MiaoshaOrder;
 import com.example.demo.domain.MiaoshaUser;
-import com.example.demo.domain.OrderInfo;
 import com.example.demo.rabbitmq.MQSender;
 import com.example.demo.rabbitmq.MiaoshaMessage;
 import com.example.demo.redis.GoodsKey;
@@ -11,15 +11,22 @@ import com.example.demo.redis.RedisService;
 import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
 import com.example.demo.service.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
 
 @Controller
 @RequestMapping("/miaosha")
@@ -42,18 +49,28 @@ public class MiaoshaController implements InitializingBean {
     @Autowired
     MQSender sender;
 
+    private static final Logger logger = LoggerFactory.getLogger(MiaoshaController.class);
+
     private Map<Long, Boolean> localOverMap = new HashMap<>();
 
-    @RequestMapping(value = "/do_miaosha", method = RequestMethod.POST)
+    @RequestMapping(value = "/{path}/do_miaosha", method = RequestMethod.POST)
     @ResponseBody
-    public Result<Integer> miaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId){
+    public Result<Integer> miaosha(Model model, MiaoshaUser user,
+                                   @RequestParam("goodsId")long goodsId,
+                                   @PathVariable("path")String path){
         model.addAttribute("user", user);
         if(user == null){
 //            return new ModelAndView("login");
             return Result.error(CodeMsg.SESSION_ERROR);
         }
 
-        // 内存标记
+        // 验证path
+        boolean check = miaoshaService.checkPath(user.getId(), path, goodsId);
+        if(!check){
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
+
+        // 内存标记，减少redis访问
         if(localOverMap.get(goodsId)){
             return Result.error(CodeMsg.MIAOSHA_OVER);
         }
@@ -121,6 +138,48 @@ public class MiaoshaController implements InitializingBean {
         }
         long result = miaoshaService.getMiaoshaResult(user.getId(), goodsId);
         return Result.success(result);
+    }
+
+    @AccessLimit(seconds = 5, maxCount = 5, needLogin = true)
+    @RequestMapping(value = "/path", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMisoshaPath(HttpServletRequest request, MiaoshaUser user,
+                                         @RequestParam("goodsId")long goodsId,
+                                         @RequestParam(value = "verifyCode", defaultValue = "0")int verifyCode){
+        if(user == null){
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+
+        boolean check = miaoshaService.checkVerifyCode(user.getId(), goodsId, verifyCode);
+        if(!check){
+            return Result.error(CodeMsg.VERIFYCODE_ERROR);
+        }
+        String path = miaoshaService.createPath(user.getId(), goodsId);
+
+        return Result.success(path);
+    }
+
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<BufferedImage> getVerifyCode(HttpServletResponse response, MiaoshaUser user,
+                                               @RequestParam("goodsId")long goodsId){
+        logger.info(Thread.currentThread().toString() + " /miaosha/verifyCode");
+
+        if(user == null){
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+
+        try{
+            BufferedImage image = miaoshaService.createVerifyCode(user.getId(), goodsId);
+            OutputStream out = response.getOutputStream();
+            ImageIO.write(image, "JPEG", out);
+            out.flush();
+            out.close();
+            return null;
+        } catch (Exception e){
+            e.printStackTrace();
+            return Result.error(CodeMsg.MIAOSHA_FAIL);
+        }
     }
 
     /**
